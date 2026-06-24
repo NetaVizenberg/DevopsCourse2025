@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: drupal
+      POSTGRES_USER: drupal
+      POSTGRES_PASSWORD: drupal123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - drupal-network
+
+  drupal:
+    image: drupal:10
+    container_name: drupal-app
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    networks:
+      - drupal-network
+
+volumes:
+  postgres_data:
+
+networks:
+  drupal-network:
